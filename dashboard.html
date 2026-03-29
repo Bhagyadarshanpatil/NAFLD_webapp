@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NAFLD Doctor Dashboard</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    .doc-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.doc-clinic {
+  color: #6366f1;
+  margin-left: 6px;
+  font-size: 1rem;
+}
+
+.patient-card {
+  background: white;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+  cursor: pointer;
+}
+
+.patient-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.patient-card-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pc-left h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.pc-right {
+  text-align: right;
+  margin-right: 15px;
+}
+
+.age-text {
+  font-weight: 500;
+  color: #334155;
+}
+
+.risk-text {
+  margin-top: 4px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.small-btn {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+
+    body {
+      background: #f5f7fb;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .top-header {
+      background: white;
+      padding: 18px 26px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .doc-info h2 {
+      margin: 0;
+      color: #1e3a8a;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .doc-info p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .btn-logout {
+      background: #ef4444;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .container-main {
+      max-width: 1200px;
+      margin: 25px auto;
+      padding: 0 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      color: #1f2937;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .btn-add {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    /* Patient cards */
+    .patients-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .patient-card {
+      background: white;
+      padding: 18px;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      cursor: pointer;
+      transition: transform 0.1s ease-in-out;
+    }
+
+    .patient-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .pc-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .tag {
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .low { background: #d1fae5; color: #065f46; }
+    .medium { background: #fef3c7; color: #92400e; }
+    .high { background: #fee2e2; color: #991b1b; }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.40);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: white;
+      padding: 28px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 22px;
+      gap: 12px;
+    }
+
+    .btn-cancel {
+      background: #e5e7eb;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="top-header">
+    <div class="doc-info">
+      <h2>NAFLD Clinical Assistant</h2>
+      <p id="doctor-info">Loading...</p>
+    </div>
+    <button id="signout-btn" class="btn-logout">Sign Out</button>
+  </header>
+
+  <!-- MAIN -->
+  <main class="container-main">
+    <div class="topbar">
+      <h2>Patients</h2>
+      <button id="add-btn" class="btn-add">+ Add Patient</button>
+    </div>
+
+    <div id="patients-list" class="patients-grid"></div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <h3>Add Patient</h3>
+
+      <form id="add-form">
+
+        <label>Full Name</label>
+        <input name="name" required />
+
+        <label>Age</label>
+        <input name="age" type="number" required />
+
+        <label>Gender</label>
+        <select name="gender">
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+
+        <div class="modal-actions">
+          <button type="button" id="cancel-btn" class="btn-cancel">Cancel</button>
+          <button type="submit" class="btn-add">Add</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/dashboard.js"></script>
+
+</body>
+</html>

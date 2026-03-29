@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Patient Details</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Reuse Dashboard Header Styles */
+    .site-header { background: #ffffff; padding: 18px 32px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 20px; }
+    .header-left h2 { margin: 0; font-size: 22px; font-weight: 700; }
+    .doctor-meta { font-size: 14px; color: #6b7280; margin-top: 2px; }
+    .btn-logout { background: #ef4444; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-size: 14px; cursor: pointer; transition: 0.2s; }
+    .btn-logout:hover { background: #dc2626; }
+
+    /* Layout */
+    .container-main{max-width:1100px;margin:20px auto;padding:0 16px;}
+    .section{background:white;padding:24px;border-radius:12px;margin-top:16px;box-shadow:0 4px 12px rgba(2,6,23,0.06);}
+    
+    /* Buttons */
+    .btn-add{background:#2563eb;color:#fff;padding:10px 16px;border-radius:8px;border:0;cursor:pointer;font-weight:600;font-size:14px;}
+    .btn-add:hover { background: #1d4ed8; }
+    .btn-secondary { background: #e2e8f0; color: #334155; padding: 10px 16px; border-radius: 8px; border: 0; cursor: pointer; font-weight: 600; }
+    .link-btn { background:none; border:none; color:#64748b; font-weight:600; cursor:pointer; margin-bottom:10px; display:inline-block; }
+    .link-btn:hover { color:#1e293b; }
+
+    /* Report Cards */
+    .reports-grid { display: grid; gap: 15px; margin-top: 20px; }
+    .report-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .report-info h4 { margin: 0 0 5px 0; color: #0f172a; }
+    .report-meta { font-size: 0.9rem; color: #64748b; }
+    .tag { padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin-left: 10px; }
+    .tag-green { background: #dcfce7; color: #166534; }
+    .tag-red { background: #fee2e2; color: #991b1b; }
+    
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;padding:20px; z-index: 1000;}
+    .modal-card{background:white;padding:24px;border-radius:16px;max-width:650px;width:100%;max-height:90vh;overflow-y:auto; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);}
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+    .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: #334155; margin-bottom: 4px; }
+    .form-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; }
+    
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+ <header class="site-header">
+  <div class="header-left">
+    <h2>NAFLD Clinical Assistant</h2>
+    <p id="doctor-info" class="doctor-meta">Loading...</p>
+  </div>
+  <button id="signout-btn" class="btn-logout">Sign Out</button>
+</header>
+
+  <main class="container-main">
+    <button onclick="window.location.href='dashboard.html'" class="link-btn">← Back to Dashboard</button>
+
+    <!-- Patient Info Section -->
+    <div id="patient-info" class="section">
+        <h3>Patient Profile</h3>
+        <p class="muted">Loading patient data...</p>
+    </div>
+
+    <!-- Reports Section -->
+    <div class="section">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3>Clinical Reports & Analysis</h3>
+        <button id="add-report-btn" class="btn-add">+ New Analysis</button>
+      </div>
+      <div id="reports-list" class="reports-grid"></div>
+    </div>
+  </main>
+
+  <!-- New Analysis Modal (Replaces Phase 1) -->
+  <div id="report-modal" class="modal hidden">
+    <div class="modal-card">
+      <h2 style="margin-top:0">New Clinical Analysis</h2>
+      <p style="color:#64748b; font-size:0.9rem; margin-bottom:20px;">Enter clinical markers below. The system will automatically calculate the risk score.</p>
+
+      <form id="report-form">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Report Date</label>
+                <input name="reportDate" type="date" required />
+            </div>
+            <div class="form-group">
+                <label>BMI (kg/m²)</label>
+                <input name="bmi" type="number" step="0.1" required />
+            </div>
+            <div class="form-group">
+                <label>ALT (U/L)</label>
+                <input name="alt" type="number" required />
+            </div>
+            <div class="form-group">
+                <label>AST (U/L)</label>
+                <input name="ast" type="number" required />
+            </div>
+            <div class="form-group">
+                <label>ALP (U/L)</label>
+                <input name="alp" type="number" required />
+            </div>
+            <div class="form-group">
+                <label>Albumin (g/dL)</label>
+                <input name="albumin" type="number" step="0.01" required />
+            </div>
+            <div class="form-group">
+                <label>A/G Ratio</label>
+                <input name="agRatio" type="number" step="0.01" required />
+            </div>
+            <div class="form-group">
+                <label>Total Bilirubin (mg/dL)</label>
+                <input name="totalBilirubin" type="number" step="0.01" required />
+            </div>
+            <div class="form-group">
+                <label>Direct Bilirubin (mg/dL)</label>
+                <input name="directBilirubin" type="number" step="0.01" required />
+            </div>
+            <div class="form-group">
+                <label>Total Protein (g/dL)</label>
+                <input name="totalProtein" type="number" step="0.01" required />
+            </div>
+        </div>
+
+        <div id="modal-error" style="color:red; margin-top:10px; display:none;"></div>
+
+        <div style="display:flex; gap:10px; margin-top:25px; justify-content:flex-end;">
+          <button type="button" id="close-modal" class="btn-secondary">Cancel</button>
+          <button type="submit" id="save-btn" class="btn-add">Analyze & Save Report</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/patient-detail.js"></script>
+</body>
+</html>

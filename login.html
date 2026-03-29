@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Doctor Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      background: #eef2ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: #fff;
+      padding: 35px;
+      width: 420px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .card h2 {
+      color: #1e3a8a;
+      margin-bottom: 6px;
+    }
+
+    .card p {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 15px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: #2563eb;
+      border: none;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .toggle-text {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .link-btn {
+      background: none;
+      border: none;
+      color: #2563eb;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h2 id="form-title">Welcome Doctor</h2>
+    <p id="form-subtitle">Login to continue</p>
+
+    <form id="login-form">
+
+      <div id="name-block" class="hidden">
+        <input id="doctorName" type="text" class="input-field" placeholder="Doctor Name" />
+      </div>
+
+      <div id="clinic-block" class="hidden">
+        <input id="clinicName" type="text" class="input-field" placeholder="Clinic Name" />
+      </div>
+
+      <input id="email" type="email" class="input-field" placeholder="Email" required />
+      <input id="password" type="password" class="input-field" placeholder="Password" required />
+
+      <button id="submit-btn" class="btn-primary">Sign In</button>
+
+      <div id="toggle" class="toggle-text">
+        Don't have an account?
+        <button type="button" class="link-btn" onclick="switchMode()">Sign Up</button>
+      </div>
+
+    </form>
+  </div>
+
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/login.js"></script>
+
+</body>
+</html>
